@@ -69,7 +69,7 @@ endif
 # it will run the make target(s) provided by the second argument
 define all
 	@for dir in $$(ls -1); do \
-		if [[ -e "$$dir/$(1)" ]]; then \
+		if [ -e "$$dir/$(1)" ]; then \
 			BUNDLE=$$dir make --no-print-directory $(2) ; \
 		fi ; \
 	done
