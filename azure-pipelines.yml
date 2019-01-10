@@ -48,30 +48,37 @@ steps:
   displayName: 'Export KUBECONFIG and BUNDLE'
 
 - bash: |
-    make build
+    make init build
+  failOnStderr: true
   displayName: 'Build and sign bundle'
 
 - bash: |
     make push
+  failOnStderr: true
   displayName: 'Push bundle invocation image(s)'
 
 - bash: |
     make install
+  failOnStderr: true
   displayName: 'Install bundle'
 
 - bash: |
     make status
+  failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
     make upgrade
+  failOnStderr: true
   displayName: 'Upgrade bundle'
 
 - bash: |
     make status
+  failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
     make uninstall
+  failOnStderr: true
   displayName: 'Uninstall bundle'
 
