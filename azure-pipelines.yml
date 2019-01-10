@@ -34,6 +34,7 @@ steps:
     cd $(GOPATH)/src/github.com/deislabs/duffle
     make bootstrap build
     cp bin/duffle $(GOPATH)/bin/
+    cd $(Build.SourcesDirectory)
   displayName: 'Install duffle'
 
 # Fetch AKS Kubeconfig
@@ -41,16 +42,12 @@ steps:
   inputs:
     secureFile: kubeconfig
 
-- script: |
-    export KUBECONFIG=$DOWNLOADSECUREFILE_SECUREFILEPATH
-    export BUNDLE=example-voting-app
-    cd $(Build.SourcesDirectory)
-  displayName: 'Export KUBECONFIG and BUNDLE'
-
 - bash: |
     make init build
   failOnStderr: true
   displayName: 'Build and sign bundle'
+
+# TODO: upload bundle to storage?
 
 - bash: |
     make push
@@ -59,26 +56,41 @@ steps:
 
 - bash: |
     make install
+  env:
+    KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
+    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Install bundle'
 
 - bash: |
     make status
+  env:
+    KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
+    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
     make upgrade
+  env:
+    KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
+    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Upgrade bundle'
 
 - bash: |
     make status
+  env:
+    KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
+    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
     make uninstall
+  env:
+    KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
+    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Uninstall bundle'
 
