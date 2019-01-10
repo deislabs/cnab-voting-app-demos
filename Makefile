@@ -1,3 +1,4 @@
+SHELL           ?= bash
 DOCKER_REGISTRY ?= $(USER)
 IMAGE_TAG       ?= latest
 BUNDLE          ?=

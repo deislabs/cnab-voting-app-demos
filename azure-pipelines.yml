@@ -45,35 +45,33 @@ steps:
     export KUBECONFIG=$DOWNLOADSECUREFILE_SECUREFILEPATH
     export BUNDLE=example-voting-app
     cd $(Build.SourcesDirectory)
-    # DEBUG
-    pwd && ls -haltr
   displayName: 'Export KUBECONFIG and BUNDLE'
 
-- script: |
+- bash: |
     make build
   displayName: 'Build and sign bundle'
 
-- script: |
+- bash: |
     make push
   displayName: 'Push bundle invocation image(s)'
 
-- script: |
+- bash: |
     make install
   displayName: 'Install bundle'
 
-- script: |
+- bash: |
     make status
   displayName: 'Check bundle status'
 
-- script: |
+- bash: |
     make upgrade
   displayName: 'Upgrade bundle'
 
-- script: |
+- bash: |
     make status
   displayName: 'Check bundle status'
 
-- script: |
+- bash: |
     make uninstall
   displayName: 'Uninstall bundle'
 
