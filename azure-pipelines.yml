@@ -1,0 +1,64 @@
+trigger:
+- master
+
+variables:
+  GOBIN:  '$(GOPATH)/bin' # Go binaries path
+  GOROOT: '/usr/local/go1.11' # Go installation path
+  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
+  DOCKER_REGISTRY: 'cnab'
+
+steps:
+- task: Docker@1
+  displayName: Login
+  inputs:
+    containerRegistryType: Container Registry
+    dockerRegistryEndpoint: cnab-registry
+    command: login
+
+# TODO: Alternatively, we could run all duffle cmds via deislabs/duffle:latest docker container and remove this (and GO setup)
+# Get Duffle
+- script: |
+    git clone https://github.com/deislabs/duffle.git '$(GOPATH)/src/github.com/deislabs/duffle'
+    cd $(GOPATH)/src/github.com/deislabs/duffle
+    make bootstrap build
+    cp bin/duffle $(GOPATH)/bin/
+  displayName: 'Install duffle'
+
+# Fetch AKS Kubeconfig
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: kubeconfig
+
+- script: |
+    export KUBECONFIG=$DOWNLOADSECUREFILE_SECUREFILEPATH
+    export BUNDLE=example-voting-app
+  displayName: 'Export KUBECONFIG and BUNDLE'
+
+- script: |
+    make build
+  displayName: 'Build and sign bundle'
+
+- script: |
+    make push
+  displayName: 'Push bundle invocation image(s)'
+
+- script: |
+    make install
+  displayName: 'Install bundle'
+
+- script: |
+    make status
+  displayName: 'Check bundle status'
+
+- script: |
+    make upgrade
+  displayName: 'Upgrade bundle'
+
+- script: |
+    make status
+  displayName: 'Check bundle status'
+
+- script: |
+    make uninstall
+  displayName: 'Uninstall bundle'
+
