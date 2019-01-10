@@ -21,6 +21,9 @@ else
 	docker push $(DOCKER_REGISTRY)/$(BUNDLE):$(IMAGE_TAG)
 endif
 
+init:
+	duffle init -u "test@cnab-voting-app-demos.com"
+
 sign:
 ifndef BUNDLE
 	$(call bundle-all,sign)
