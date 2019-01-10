@@ -5,7 +5,7 @@
     "invocationImages": [
         {
         "imageType": "docker",
-        "image": "quay.io/vdice/example-voting-app:latest"
+        "image": "cnab/example-voting-app:latest"
         }
     ],
     "images": [],
