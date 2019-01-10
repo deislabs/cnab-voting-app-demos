@@ -5,6 +5,7 @@ variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   GOROOT: '/usr/local/go1.11' # Go installation path
   GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
+  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
   DOCKER_REGISTRY: 'cnab'
 
 steps:
@@ -23,6 +24,9 @@ steps:
 - script: |
     mkdir -p '$(GOBIN)'
     mkdir -p '$(GOPATH)/pkg'
+    mkdir -p '$(modulePath)'
+    shopt -s extglob
+    mv !(gopath) '$(modulePath)'
     echo '##vso[task.prependpath]$(GOBIN)'
     echo '##vso[task.prependpath]$(GOROOT)/bin'
   displayName: 'Set up the Go workspace'
@@ -48,29 +52,36 @@ steps:
 
 - script: |
     make build
+  workingDirectory: '$(modulePath)'
   displayName: 'Build and sign bundle'
 
 - script: |
     make push
+  workingDirectory: '$(modulePath)'
   displayName: 'Push bundle invocation image(s)'
 
 - script: |
     make install
+  workingDirectory: '$(modulePath)'
   displayName: 'Install bundle'
 
 - script: |
     make status
+  workingDirectory: '$(modulePath)'
   displayName: 'Check bundle status'
 
 - script: |
     make upgrade
+  workingDirectory: '$(modulePath)'
   displayName: 'Upgrade bundle'
 
 - script: |
     make status
+  workingDirectory: '$(modulePath)'
   displayName: 'Check bundle status'
 
 - script: |
     make uninstall
+  workingDirectory: '$(modulePath)'
   displayName: 'Uninstall bundle'
 
