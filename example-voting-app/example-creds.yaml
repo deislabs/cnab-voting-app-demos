@@ -1,0 +1,5 @@
+name: example-voting-app-creds
+credentials:
+- name: kubeconfig
+  source:
+    path: PATH/TO/KUBECONFIG
