@@ -22,7 +22,7 @@ endif
 
 sign:
 ifndef BUNDLE
-	$(call bundle-all,sign-local)
+	$(call bundle-all,sign)
 else
 	duffle bundle sign -f $(BUNDLE)/bundle.json -o $(BUNDLE)/bundle.cnab
 endif
