@@ -50,6 +50,8 @@ steps:
   displayName: 'Export KUBECONFIG and BUNDLE'
 
 - script: |
+    docker
+    set -x
     make build
   displayName: 'Build and sign bundle'
 
