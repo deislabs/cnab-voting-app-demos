@@ -54,22 +54,18 @@ steps:
   displayName: 'Push bundle invocation image(s)'
 
 - bash: |
+    export AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING)
     make export
     make upload
   failOnStderr: true
-  env:
-    AZURE_STORAGE_ACCOUNT: "$(AZURE_STORAGE_ACCOUNT)"
-    AZURE_STORAGE_KEY: "$(AZURE_STORAGE_KEY)"
   displayName: 'Export bundle and upload to Azure Storage'
 
 # TODO: once upload is working, we can add download & import step here to prove concept
 # - bash: |
+#     export AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING)
 #     make download
 #     make import
 #   failOnStderr: true
-#   env:
-#     AZURE_STORAGE_ACCOUNT: "$(AZURE_STORAGE_ACCOUNT)"
-#     AZURE_STORAGE_KEY: "$(AZURE_STORAGE_KEY)"
 #   displayName: 'Export bundle and upload to Azure Storage'
 
 # TODO: if we enable importing above, we'd want to spec BUNDLE=$(BUNDLE)-$(BUNDLE_VERSION) for steps below
