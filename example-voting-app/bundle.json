@@ -1,5 +1,5 @@
 {
-    "name": "vote",
+    "name": "example-voting-app",
     "version": "0.1.0",
     "description": "A simple distributed application running across multiple Docker containers",
     "invocationImages": [

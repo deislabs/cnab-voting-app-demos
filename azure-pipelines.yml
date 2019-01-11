@@ -43,11 +43,10 @@ steps:
     secureFile: kubeconfig
 
 - bash: |
-    make init build
+    make init
+    make build
   failOnStderr: true
   displayName: 'Build and sign bundle'
-
-# TODO: upload bundle to storage?
 
 - bash: |
     make push
@@ -55,10 +54,17 @@ steps:
   displayName: 'Push bundle invocation image(s)'
 
 - bash: |
+    make export
+    make upload
+  failOnStderr: true
+  env:
+    AZURE_STORAGE_CONNECTION_STRING: $(AZURE_STORAGE_CONNECTION_STRING)
+  displayName: 'Export bundle and upload to Azure Storage'
+
+- bash: |
     make install
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
-    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Install bundle'
 
@@ -66,7 +72,6 @@ steps:
     make status
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
-    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Check bundle status'
 
@@ -74,7 +79,6 @@ steps:
     make upgrade
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
-    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Upgrade bundle'
 
@@ -82,7 +86,6 @@ steps:
     make status
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
-    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Check bundle status'
 
@@ -90,7 +93,6 @@ steps:
     make uninstall
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
-    BUNDLE: example-voting-app
   failOnStderr: true
   displayName: 'Uninstall bundle'
 
