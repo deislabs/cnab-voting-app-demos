@@ -61,13 +61,11 @@ steps:
 - bash: |
     make export
     AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make upload
-  failOnStderr: true
   displayName: 'Export bundle and upload to Azure Storage'
 
 - bash: |
     AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make download
     make import
-  failOnStderr: true
   displayName: 'Export bundle and upload to Azure Storage'
 
 - bash: |
