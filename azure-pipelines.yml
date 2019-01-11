@@ -58,10 +58,21 @@ steps:
     make upload
   failOnStderr: true
   env:
-    AZURE_STORAGE_ACCOUNT: $(AZURE_STORAGE_ACCOUNT)
-    AZURE_STORAGE_KEY: $(AZURE_STORAGE_KEY)
+    AZURE_STORAGE_ACCOUNT: "$(AZURE_STORAGE_ACCOUNT)"
+    AZURE_STORAGE_KEY: "$(AZURE_STORAGE_KEY)"
   displayName: 'Export bundle and upload to Azure Storage'
 
+# TODO: once upload is working, we can add download & import step here to prove concept
+# - bash: |
+#     make download
+#     make import
+#   failOnStderr: true
+#   env:
+#     AZURE_STORAGE_ACCOUNT: "$(AZURE_STORAGE_ACCOUNT)"
+#     AZURE_STORAGE_KEY: "$(AZURE_STORAGE_KEY)"
+#   displayName: 'Export bundle and upload to Azure Storage'
+
+# TODO: if we enable importing above, we'd want to spec BUNDLE=$(BUNDLE)-$(BUNDLE_VERSION) for steps below
 - bash: |
     make install
   env:

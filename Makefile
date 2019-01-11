@@ -49,3 +49,8 @@ upload:
 		-c $(STORAGE_CONTAINER) \
 		-n $(BUNDLE_ARTIFACT)
 
+download:
+	az storage blob download \
+		-f $(BUNDLE_ARTIFACT) \
+		-c $(STORAGE_CONTAINER) \
+		-n $(BUNDLE_ARTIFACT)
