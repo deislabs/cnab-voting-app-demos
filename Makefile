@@ -44,9 +44,8 @@ import:
 	duffle import $(BUNDLE_ARTIFACT)
 
 upload:
-	@az storage blob upload \
+	az storage blob upload \
 		-f $(BUNDLE_ARTIFACT) \
 		-c $(STORAGE_CONTAINER) \
-		-n $(BUNDLE_ARTIFACT) \
-		--connection-string="$(AZURE_STORAGE_CONNECTION_STRING)"
+		-n $(BUNDLE_ARTIFACT)
 
