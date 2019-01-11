@@ -2,10 +2,15 @@ trigger:
 - master
 
 variables:
-  GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  GOROOT: '/usr/local/go1.11' # Go installation path
-  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
-  DOCKER_REGISTRY: 'cnab'
+- group: cnab-voting-app-demos
+- name: GOBIN
+  value: '$(GOPATH)/bin' # Go binaries path
+- name: GOROOT
+  value: '/usr/local/go1.11' # Go installation path
+- name: GOPATH
+  value: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
+- name: DOCKER_REGISTRY
+  value: 'cnab'
 
 steps:
 - task: Docker@1
@@ -54,16 +59,14 @@ steps:
   displayName: 'Push bundle invocation image(s)'
 
 - bash: |
-    export AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING)
     make export
-    make upload
+    AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make upload
   failOnStderr: true
   displayName: 'Export bundle and upload to Azure Storage'
 
 # TODO: once upload is working, we can add download & import step here to prove concept
 # - bash: |
-#     export AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING)
-#     make download
+#     AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make download
 #     make import
 #   failOnStderr: true
 #   displayName: 'Export bundle and upload to Azure Storage'
