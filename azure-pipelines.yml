@@ -64,44 +64,42 @@ steps:
   failOnStderr: true
   displayName: 'Export bundle and upload to Azure Storage'
 
-# TODO: once upload is working, we can add download & import step here to prove concept
-# - bash: |
-#     AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make download
-#     make import
-#   failOnStderr: true
-#   displayName: 'Export bundle and upload to Azure Storage'
-
-# TODO: if we enable importing above, we'd want to spec BUNDLE=$(BUNDLE)-$(BUNDLE_VERSION) for steps below
 - bash: |
-    make install
+    AZURE_STORAGE_CONNECTION_STRING=$(AZURE_STORAGE_CONNECTION_STRING) make download
+    make import
+  failOnStderr: true
+  displayName: 'Export bundle and upload to Azure Storage'
+
+- bash: |
+    make install-imported
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
   failOnStderr: true
   displayName: 'Install bundle'
 
 - bash: |
-    make status
+    make status-imported
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
   failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
-    make upgrade
+    make upgrade-imported
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
   failOnStderr: true
   displayName: 'Upgrade bundle'
 
 - bash: |
-    make status
+    make status-imported
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
   failOnStderr: true
   displayName: 'Check bundle status'
 
 - bash: |
-    make uninstall
+    make uninstall-imported
   env:
     KUBECONFIG: $(DOWNLOADSECUREFILE_SECUREFILEPATH)
   failOnStderr: true

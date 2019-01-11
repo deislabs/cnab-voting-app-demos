@@ -2,6 +2,7 @@ SHELL             ?= bash
 DOCKER_REGISTRY   ?= $(USER)
 IMAGE_TAG         ?= latest
 BUNDLE            ?= example-voting-app
+BUNDLE_NAME       ?= $(subst .,-,$(BUNDLE))
 BUNDLE_VERSION    ?= 0.1.0
 BUNDLE_ARTIFACT   ?= $(BUNDLE)-$(BUNDLE_VERSION).tgz
 STORAGE_CONTAINER ?= cnab-bundles
@@ -26,22 +27,23 @@ populate-creds:
 	@sed 's;PATH/TO/KUBECONFIG;$(KUBECONFIG);g' $(BUNDLE)/example-creds.yaml > /tmp/$(BUNDLE)-creds.yaml
 
 install: populate-creds
-	duffle install $(BUNDLE) -f $(BUNDLE)/bundle.cnab -c /tmp/$(BUNDLE)-creds.yaml
+	duffle install $(BUNDLE_NAME) -f $(BUNDLE)/bundle.cnab -c /tmp/$(BUNDLE)-creds.yaml
 
 uninstall:
-	duffle uninstall $(BUNDLE) -c /tmp/$(BUNDLE)-creds.yaml
+	duffle uninstall $(BUNDLE_NAME) -c /tmp/$(BUNDLE)-creds.yaml
 
 status:
-	duffle status $(BUNDLE) -c /tmp/$(BUNDLE)-creds.yaml
+	duffle status $(BUNDLE_NAME) -c /tmp/$(BUNDLE)-creds.yaml
 
 upgrade:
-	duffle upgrade $(BUNDLE) -c /tmp/$(BUNDLE)-creds.yaml
+	duffle upgrade $(BUNDLE_NAME) -c /tmp/$(BUNDLE)-creds.yaml
 
 export:
-	duffle export $(BUNDLE)
+	duffle export $(BUNDLE_NAME)
 
 import:
 	duffle import $(BUNDLE_ARTIFACT)
+	cp $(BUNDLE)/example-creds.yaml $(BUNDLE)-$(BUNDLE_VERSION)
 
 upload:
 	az storage blob upload \
@@ -54,3 +56,7 @@ download:
 		-f $(BUNDLE_ARTIFACT) \
 		-c $(STORAGE_CONTAINER) \
 		-n $(BUNDLE_ARTIFACT)
+
+# targets for {install,uninstall,status,upgrade} on an imported bundle
+%-imported:
+	BUNDLE=$(BUNDLE)-$(BUNDLE_VERSION) make $*
