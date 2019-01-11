@@ -58,7 +58,8 @@ steps:
     make upload
   failOnStderr: true
   env:
-    AZURE_STORAGE_CONNECTION_STRING: $(AZURE_STORAGE_CONNECTION_STRING)
+    AZURE_STORAGE_ACCOUNT: $(AZURE_STORAGE_ACCOUNT)
+    AZURE_STORAGE_KEY: $(AZURE_STORAGE_KEY)
   displayName: 'Export bundle and upload to Azure Storage'
 
 - bash: |
